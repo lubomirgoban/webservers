@@ -34,7 +34,7 @@ if [ -d "$DESDIRDB" ]; then
   mv *.sql $DESDIRDB
   # Change directory to zip sql file
   cd $DESDIRDB
-  zip -m $DESDIRDB/$DBNAME *
+  zip -m $DESDIRDB/$DBNAME *.sql
   rclone copy $DESDIRDB/$DBNAME $RCLONEDRIVE:$DOMAIN
 else
   ###  Control will jump here if $DIR does NOT exists ###
@@ -42,6 +42,6 @@ else
   mv *.sql $DESDIRDB
   # Change directory to zip sql file
   cd $DESDIRDB
-  zip -m $DESDIRDB/$DBNAME *
+  zip -m $DESDIRDB/$DBNAME *.sql
   rclone copy $DESDIRDB/$DBNAME $RCLONEDRIVE:$DOMAIN
 fi
