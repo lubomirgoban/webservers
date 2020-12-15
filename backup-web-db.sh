@@ -2,7 +2,10 @@
 # Change domain per domain
 USERNAME=
 DOMAIN=
+#RCLONE REMOTE LOCATION
 RCLONEDRIVE=gdrive-backup                     # Name for rclone drive
+RCDWEB=$RCLONEDRIVE:$DOMAIN/WEB
+RCDDB=$RCLONEDRIVE:$DOMAIN/DB
 #EXCLUDE=folder-name
 ###
 TIME=`date +\%F-%HH-%mM-%SS`                    # This Command will read the date.
@@ -12,17 +15,18 @@ SRCDIR=/home/$USERNAME/webapps/$DOMAIN           # Source backup folder.
 DESDIR=/home/$USERNAME/backups/$DOMAIN/WEB       # Destination of backup file.
 DESDIRDB=/home/$USERNAME/backups/$DOMAIN/DB      # Destination of DB backup file.
 
+
 if [ -d "$DESDIR" ]; then
   ### Take action if $DIR exists ###
   #tar -cpzf $DESDIR/$FILENAME --exclude "$EXCLUDE" $SRCDIR
   tar -cpzf $DESDIR/$FILENAME $SRCDIR
-  rclone copy $DESDIR/$FILENAME $RCLONEDRIVE:$DOMAIN
+  rclone copy $DESDIR/$FILENAME $RCDWEB
 else
   ###  Control will jump here if $DIR does NOT exists ###
   mkdir -p /home/$USERNAME/backups/$DOMAIN/WEB
   #tar -cpzf $DESDIR/$FILENAME --exclude "$EXCLUDE" $SRCDIR
   tar -cpzf $DESDIR/$FILENAME $SRCDIR
-  rclone copy $DESDIR/$FILENAME $RCLONEDRIVE:$DOMAIN
+  rclone copy $DESDIR/$FILENAME $RCDWEB
 fi
 
 # Change current directory to WP install to export DB
@@ -35,7 +39,7 @@ if [ -d "$DESDIRDB" ]; then
   # Change directory to zip sql file
   cd $DESDIRDB
   zip -m $DESDIRDB/$DBNAME *.sql
-  rclone copy $DESDIRDB/$DBNAME $RCLONEDRIVE:$DOMAIN
+  rclone copy $DESDIRDB/$DBNAME $RCDDB
 else
   ###  Control will jump here if $DIR does NOT exists ###
   mkdir -p /home/$USERNAME/backups/$DOMAIN/DB
@@ -43,5 +47,5 @@ else
   # Change directory to zip sql file
   cd $DESDIRDB
   zip -m $DESDIRDB/$DBNAME *.sql
-  rclone copy $DESDIRDB/$DBNAME $RCLONEDRIVE:$DOMAIN
+  rclone copy $DESDIRDB/$DBNAME $RCDDB
 fi
