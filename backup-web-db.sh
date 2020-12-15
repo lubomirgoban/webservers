@@ -4,8 +4,8 @@ USERNAME=
 DOMAIN=
 #RCLONE REMOTE LOCATION
 RCLONEDRIVE=gdrive-backup                     # Name for rclone drive
-RCDWEB=$RCLONEDRIVE:$DOMAIN/WEB
-RCDDB=$RCLONEDRIVE:$DOMAIN/DB
+RCDWEB=$RCLONEDRIVE:$DOMAIN/WEB               # Web backup folder
+RCDDB=$RCLONEDRIVE:$DOMAIN/DB                 # DB backup folder
 #EXCLUDE=folder-name
 ###
 TIME=`date +\%F-%HH-%mM-%SS`                    # This Command will read the date.
@@ -15,7 +15,7 @@ SRCDIR=/home/$USERNAME/webapps/$DOMAIN           # Source backup folder.
 DESDIR=/home/$USERNAME/backups/$DOMAIN/WEB       # Destination of backup file.
 DESDIRDB=/home/$USERNAME/backups/$DOMAIN/DB      # Destination of DB backup file.
 
-
+# WEB LOCATION BACKUP
 if [ -d "$DESDIR" ]; then
   ### Take action if $DIR exists ###
   #tar -cpzf $DESDIR/$FILENAME --exclude "$EXCLUDE" $SRCDIR
@@ -29,6 +29,7 @@ else
   rclone copy $DESDIR/$FILENAME $RCDWEB
 fi
 
+# DB LOCATION BACKUP
 # Change current directory to WP install to export DB
 cd $SRCDIR
 wp db export    # Basic WP-Cli export command
